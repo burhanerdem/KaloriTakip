@@ -1,6 +1,3 @@
-# KaloriTakip
-a Turkish Calorie Tracker app
-
 # KaloriTakip - Calorie & Macro Tracker
 
 KaloriTakip is a client-side web application designed for comprehensive calorie and macronutrient tracking. It helps users monitor their daily food intake, log custom meals, track weight, and visualize progress through reports. All data is stored locally in the user's browser, ensuring privacy and offline functionality.
