@@ -2,6 +2,9 @@
 
 KaloriTakip is a client-side web application designed for comprehensive calorie and macronutrient tracking. It helps users monitor their daily food intake, log custom meals, track weight, and visualize progress through reports. All data is stored locally in the user's browser, ensuring privacy and offline functionality.
 
+![image](https://github.com/user-attachments/assets/052c19f4-bdfd-4854-b2ac-1507d77f7f67)
+
+
 ## Key Features
 
 *   **Daily Logging:** Track calories, protein, carbohydrates, and fats for breakfast, lunch, and dinner.
