@@ -1,0 +1,290 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Kalori ve Makro Takip</title>
+    <link rel="stylesheet" href="css/all.min.css"> <!-- Yerel Font Awesome -->
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+<div class="app-shell">
+    <!-- Header -->
+    <header class="app-header">
+        <button class="date-nav-btn" id="prevDayBtn" aria-label="Önceki gün"><i class="fas fa-chevron-left"></i></button>
+        <div class="date-display-container" id="dateDisplayContainer">
+            <span id="currentDateText"></span>
+            <i class="fas fa-calendar-alt" style="margin-left: 8px;"></i>
+        </div>
+        <button class="date-nav-btn" id="nextDayBtn" aria-label="Sonraki gün"><i class="fas fa-chevron-right"></i></button>
+        <button class="add-food-header-btn" id="openAddFoodModalHeaderBtn" aria-label="Yiyecek ekle"><i class="fas fa-plus"></i></button>
+    </header>
+
+    <!-- Main Content -->
+    <main class="app-main">
+        <!-- Daily Log Page -->
+        <div id="dailyLogPage" class="page active-page">
+            <!-- Daily Overview Card -->
+            <div class="daily-overview-card">
+                <div class="overview-calories">
+                    <span id="consumedCaloriesDisplay">0</span>
+                    <span class="label">ALINAN KALORİ</span>
+                </div>
+                <div class="overview-macros">
+                    <div class="macro-item">
+                        <span class="label">Protein</span>
+                        <span class="value" id="totalProteinDisplay">0g</span>
+                        <div class="progress-bar"><div class="protein-fill" id="proteinProgress"></div></div>
+                    </div>
+                    <div class="macro-item">
+                        <span class="label">Karbonhidrat</span>
+                        <span class="value" id="totalCarbsDisplay">0g</span>
+                        <div class="progress-bar"><div class="carbs-fill" id="carbsProgress"></div></div>
+                    </div>
+                    <div class="macro-item">
+                        <span class="label">Yağ</span>
+                        <span class="value" id="totalFatDisplay">0g</span>
+                        <div class="progress-bar"><div class="fat-fill" id="fatProgress"></div></div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Meal Sections -->
+            <div class="meal-sections-container">
+                <!-- Breakfast -->
+                <div class="meal-card" id="mealCardBreakfast">
+                    <div class="meal-card-header">
+                        <h3><i class="fas fa-sun meal-icon breakfast"></i>Kahvaltı</h3>
+                        <div class="meal-summary-controls">
+                            <span class="meal-calories-summary" id="breakfastTotalCalories">0 Kalori</span>
+                            <button class="add-item-to-meal-btn" data-meal="breakfast" aria-label="Kahvaltıya yiyecek ekle"><i class="fas fa-plus-circle"></i></button>
+                        </div>
+                    </div>
+                    <ul class="meal-items-list" id="breakfastList">
+                        <!-- Food items will be populated by JS -->
+                    </ul>
+                </div>
+                <!-- Lunch -->
+                <div class="meal-card" id="mealCardLunch">
+                    <div class="meal-card-header">
+                        <h3><i class="fas fa-cloud-sun meal-icon lunch"></i>Öğle Yemeği</h3>
+                        <div class="meal-summary-controls">
+                            <span class="meal-calories-summary" id="lunchTotalCalories">0 Kalori</span>
+                            <button class="add-item-to-meal-btn" data-meal="lunch" aria-label="Öğle yemeğine yiyecek ekle"><i class="fas fa-plus-circle"></i></button>
+                        </div>
+                    </div>
+                    <ul class="meal-items-list" id="lunchList">
+                        <!-- Food items will be populated by JS -->
+                    </ul>
+                </div>
+                <!-- Dinner -->
+                <div class="meal-card" id="mealCardDinner">
+                    <div class="meal-card-header">
+                        <h3><i class="fas fa-moon meal-icon dinner"></i>Akşam Yemeği</h3>
+                        <div class="meal-summary-controls">
+                            <span class="meal-calories-summary" id="dinnerTotalCalories">0 Kalori</span>
+                            <button class="add-item-to-meal-btn" data-meal="dinner" aria-label="Akşam yemeğine yiyecek ekle"><i class="fas fa-plus-circle"></i></button>
+                        </div>
+                    </div>
+                    <ul class="meal-items-list" id="dinnerList">
+                        <!-- Food items will be populated by JS -->
+                    </ul>
+                </div>
+            </div>
+
+            <!-- Custom Food Button Container -->
+            <div class="custom-food-btn-container">
+                <button class="btn btn-secondary full-width" id="openAddCustomFoodModalBtn"><i class="fas fa-plus-square"></i> Yeni Yiyecek Bilgisi Ekle</button>
+            </div>
+
+            <!-- Daily Details Card -->
+            <div class="daily-details-card">
+                <h4>Günlük Besin Detayları</h4>
+                <div class="nutrition-details-grid">
+                    <p>Toplam Yağ: <strong id="detailsTotalFat">0g</strong></p>
+                    <p>Kolesterol: <strong id="detailsCholesterol">0mg</strong></p>
+                    <p>Sodyum: <strong id="detailsSodium">0mg</strong></p>
+                    <p>Toplam Karb: <strong id="detailsTotalCarbs">0g</strong></p>
+                    <p>Diyet Lifi: <strong id="detailsDietaryFiber">0g</strong></p>
+                    <p>Şekerler: <strong id="detailsTotalSugars">0g</strong></p>
+                    <p>Protein: <strong id="detailsTotalProtein">0g</strong></p>
+                </div>
+                <div class="macro-pie-chart-container">
+                    <div class="pie-chart-simple" id="summaryPieChart"></div>
+                    <div class="pie-chart-legend">
+                        <div><span class="color-dot" style="background-color: var(--protein-color);"></span>Protein: <span id="distProteinPercent">0%</span></div>
+                        <div><span class="color-dot" style="background-color: var(--carbs-color);"></span>Karb: <span id="distCarbsPercent">0%</span></div>
+                        <div><span class="color-dot" style="background-color: var(--fat-color);"></span>Yağ: <span id="distFatPercent">0%</span></div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Quick Actions Card -->
+            <div class="quick-actions-card">
+                <h4>Günlük Kilo Takibi</h4>
+                <div class="weight-input-group">
+                    <input type="number" id="dailyWeightInput" placeholder="Kilo (kg)" step="0.1">
+                    <button class="btn btn-primary" id="saveWeightButton">Kaydet</button>
+                </div>
+                <div class="feedback-message" id="weightFeedbackMessage"></div>
+            </div>
+        </div>
+
+        <!-- Reports Page -->
+        <div id="reportsPage" class="page">
+            <h2>Raporlar</h2>
+            <div class="report-filters">
+                <label for="reportMonth">Ay:</label>
+                <select id="reportMonth"></select>
+                <label for="reportYear">Yıl:</label>
+                <select id="reportYear"></select>
+                <button id="generateReportButton" class="btn">Raporu Göster</button>
+            </div>
+            <div class="charts-container">
+                <div class="chart-card">
+                    <h3>Günlük Alınan Kalori Grafiği</h3>
+                    <canvas id="caloriesChart"></canvas>
+                </div>
+                <div class="chart-card">
+                    <h3>Günlük Kilo Değişim Grafiği</h3>
+                    <canvas id="weightChart"></canvas>
+                </div>
+            </div>
+            <!-- Veri Yönetimi Kartı -->
+            <div class="report-actions-card">
+                <h4>Veri Yönetimi</h4>
+                <button id="exportDataBtn" class="btn btn-secondary"><i class="fas fa-file-export"></i> Verileri Dışa Aktar</button>
+                <div class="import-data-group">
+                    <label for="importDataInput" class="btn btn-secondary"><i class="fas fa-file-import"></i> Verileri İçe Aktar...</label>
+                    <input type="file" id="importDataInput" accept=".json" style="display: none;">
+                </div>
+                <p id="importExportFeedback" class="feedback-message" style="text-align: left; margin-top: 10px;"></p>
+            </div>
+        </div>
+    </main>
+
+    <!-- Footer Navigation -->
+    <footer class="app-footer">
+        <button id="navDailyLog" class="nav-btn active-nav"><i class="fas fa-utensils"></i><span>Günlük</span></button>
+        <button id="navReports" class="nav-btn"><i class="fas fa-chart-line"></i><span>Raporlar</span></button>
+    </footer>
+</div>
+
+<!-- Add Food Modal -->
+<div id="addFoodModal" class="modal">
+    <div class="modal-content">
+        <span class="close-modal-btn" data-modal-id="addFoodModal">×</span>
+        <h3>Yiyecek Ekle</h3>
+        <div class="form-group">
+            <label for="foodSearchInput">Yiyecek Ara:</label>
+            <input type="text" id="foodSearchInput" placeholder="Yiyecek veya özel giriş ara...">
+            <div id="searchResultsDropdown" class="search-results-dropdown">
+                <!-- Search results populated by JS -->
+            </div>
+        </div>
+
+        <div id="selectedFoodPreviewArea" class="selected-food-preview-area">
+            <h4>Seçilen Yiyecek</h4>
+            <div class="food-preview-details">
+                <p><strong>Ad:</strong> <span id="previewFoodName"></span></p>
+                <p><span id="previewFoodPortionInfo">100g</span>: <span id="previewFoodCalories">0</span> kcal</p>
+                <p>P: <span id="previewFoodProtein">0</span>g, K: <span id="previewFoodCarbs">0</span>g, Y: <span id="previewFoodFat">0</span>g</p>
+            </div>
+            <div class="quantity-controls">
+                <input type="number" id="foodQuantity" placeholder="Miktar" min="0.1" step="0.1">
+                <select id="quantityUnitSelect">
+                    <!-- JS ile porsiyon/gram seçeneği eklenecek -->
+                </select>
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label for="mealTypeSelect">Öğün Seçin:</label>
+            <select id="mealTypeSelect">
+                <option value="breakfast">Kahvaltı</option>
+                <option value="lunch">Öğle Yemeği</option>
+                <option value="dinner">Akşam Yemeği</option>
+            </select>
+        </div>
+        <button id="confirmAddFoodButton" class="btn btn-confirm full-width"><i class="fas fa-plus-circle"></i>Yiyeceği Ekle</button>
+    </div>
+</div>
+
+<!-- Add Custom Food Modal -->
+<div id="addCustomFoodModal" class="modal">
+    <div class="modal-content">
+        <span class="close-modal-btn" data-modal-id="addCustomFoodModal">×</span>
+        <h3>Yeni Yiyecek Bilgisi Ekle</h3>
+
+        <div class="form-group">
+            <label>Giriş Türü:</label>
+            <div class="radio-group" id="customFoodEntryTypeGroup">
+                <input type="radio" id="entryTypePortion" name="customFoodEntryType" value="portion" checked>
+                <label for="entryTypePortion">Porsiyon Başına</label>
+                <input type="radio" id="entryType100g" name="customFoodEntryType" value="100g">
+                <label for="entryType100g">100 Gram Başına</label>
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label for="customFoodNameInput" id="customFoodNameLabel">Yiyecek Adı (Porsiyon Bilgisiyle):</label>
+            <input type="text" id="customFoodNameInput" placeholder="Örn: Ev Yapımı Kurabiye (1 adet)">
+        </div>
+        <div class="form-group">
+            <label for="customFoodCaloriesInput" id="customFoodCaloriesLabel">Kalori (kcal / porsiyon):</label>
+            <input type="number" id="customFoodCaloriesInput" placeholder="Porsiyon başına kalori" min="0">
+        </div>
+        <div class="form-group">
+            <label for="customFoodProteinInput" id="customFoodProteinLabel">Protein (g / porsiyon):</label>
+            <input type="number" id="customFoodProteinInput" placeholder="Porsiyon başına protein" min="0" step="0.1">
+        </div>
+        <div class="form-group">
+            <label for="customFoodCarbsInput" id="customFoodCarbsLabel">Karbonhidrat (g / porsiyon):</label>
+            <input type="number" id="customFoodCarbsInput" placeholder="Porsiyon başına karbonhidrat" min="0" step="0.1">
+        </div>
+        <div class="form-group">
+            <label for="customFoodFatInput" id="customFoodFatLabel">Yağ (g / porsiyon):</label>
+            <input type="number" id="customFoodFatInput" placeholder="Porsiyon başına yağ" min="0" step="0.1">
+        </div>
+        <button id="saveCustomFoodButton" class="btn btn-confirm full-width"><i class="fas fa-save"></i>Yiyecek Bilgisini Kaydet</button>
+    </div>
+</div>
+
+<!-- Calendar Modal -->
+<div id="calendarModal" class="modal">
+    <div class="modal-content calendar-modal-content">
+        <span class="close-modal-btn" data-modal-id="calendarModal">×</span>
+        <div class="calendar-header">
+            <button id="calendarPrevMonthBtn" class="calendar-nav-btn"><i class="fas fa-chevron-left"></i></button>
+            <span id="calendarMonthYearText"></span>
+            <button id="calendarNextMonthBtn" class="calendar-nav-btn"><i class="fas fa-chevron-right"></i></button>
+        </div>
+        <div class="calendar-weekdays">
+            <span>P</span><span>S</span><span>Ç</span><span>P</span><span>C</span><span>C</span><span>P</span>
+        </div>
+        <div class="calendar-days" id="calendarDaysGrid">
+            <!-- Days will be populated by JS -->
+        </div>
+        <button id="calendarGoToTodayBtn" class="btn btn-secondary full-width" style="margin-top: 15px;">Bugün</button>
+    </div>
+</div>
+
+<!-- Export Data Modal (NEW) -->
+<div id="exportDataModal" class="modal">
+    <div class="modal-content">
+        <span class="close-modal-btn" data-modal-id="exportDataModal">×</span>
+        <h3>Dışa Aktarılan Veri</h3>
+        <p style="font-size: 0.85em; color: var(--text-secondary); margin-bottom: 10px;">
+            Aşağıdaki veriyi kopyalayıp güvenli bir yere kaydedin.
+        </p>
+        <textarea id="exportDataTextarea" readonly></textarea>
+        <button id="copyExportDataBtn" class="btn btn-primary full-width"><i class="fas fa-copy"></i> Panoya Kopyala</button>
+    </div>
+</div>
+
+<script src="js/chart.min.js"></script> <!-- Yerel Chart.js -->
+<script src="nutrient_definitions.js"></script>
+<script src="custom_foods.js"></script>
+<script src="script.js"></script>
+</body>
+</html>
