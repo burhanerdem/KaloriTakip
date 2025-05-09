@@ -66,6 +66,7 @@ This approach means your data remains private on your device, and the applicatio
     *   `custom_foods.js`
     *   `FoodData_Central_foundation_food_json_2025-04-24.json` (food database)
     *   `surveyDownload.json` (food database)
+    *   `Note: While the core food data comes from USDA FoodData Central, you have the flexibility to add your own food items and even entire datasets to personalize your experience.`
     *   `js/` (directory)
         *   `chart.min.js` (Chart.js library)
     *   `css/` (directory)
@@ -129,17 +130,3 @@ This approach means your data remains private on your device, and the applicatio
 ## Note on Localization
 
 The current user interface and some hardcoded text elements are in Turkish. The food database files (`FoodData_Central_foundation_food_json_2025-04-24.json`, `surveyDownload.json`) contain food descriptions primarily in English, but these are parsed and displayed within the Turkish UI.
-
-## Potential Future Enhancements
-
-*   User-definable daily targets for calories and macronutrients.
-*   A dedicated recipe builder with automatic nutrition calculation from ingredients.
-*   More detailed nutrient tracking (e.g., vitamins, minerals, micronutrients).
-*   Multi-language support for the UI.
-*   Water intake tracking.
-*   Exercise logging and calorie expenditure estimates.
-*   Option for cloud synchronization (would require a backend infrastructure).
-
----
-
-This README provides a good overview for anyone looking to understand or contribute to your project!
